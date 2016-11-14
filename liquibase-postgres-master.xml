@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	
+	<include file="changesets/db-agnostic/initial-schema.xml"/> 
+
+	<!-- Load Example Data -->
+	<include file="data/loadCOUNTRIES.sql"/> 
+	<include file="data/loadCITIES.sql"/> 
+	<include file="data/loadAIRLINES.sql"/>  
+	<include file="data/loadFLIGHTS1.sql"/>  
+	<include file="data/loadFLIGHTS2.sql"/>  
+	<include file="data/loadFLIGHTAVAILABILITY1.sql"/>  
+	<include file="data/loadFLIGHTAVAILABILITY2.sql"/>  
+
+	<include file="changesets/db-agnostic/schema-only.xml"/>
+	<include file="changesets/db-agnostic/qa-only.xml"/>
+	<include file="changesets/db-agnostic/sql-server-only.xml"/> 
+	<include file="changesets/db-agnostic/tag-database.xml"/> 
+
+</databaseChangeLog>

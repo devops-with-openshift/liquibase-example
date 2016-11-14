@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet author="${author}" id="1401235829407-1">
+         <sql dbms="postgresql" endDelimiter=";">
+             CREATE SCHEMA ${schema}
+         </sql>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-2">
+        <createTable tableName="airlines" schemaName="${schema}">
+            <column name="airline" type="CHAR(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="airline_full" type="VARCHAR(24)"/>
+            <column name="basic_rate" type="FLOAT"/>
+            <column name="distance_discount" type="FLOAT"/>
+            <column name="business_level_factor" type="FLOAT"/>
+            <column name="firstclass_level_factor" type="FLOAT"/>
+            <column name="economy_seats" type="INT"/>
+            <column name="business_seats" type="INT"/>
+            <column name="firstclass_seats" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-3">
+        <createTable tableName="cities" schemaName="${schema}">
+            <column name="city_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city_name" type="VARCHAR(24)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="airport" type="VARCHAR(3)"/>
+            <column name="language" type="VARCHAR(16)"/>
+            <column name="country_iso_code" type="CHAR(2)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-4">
+        <createTable tableName="countries" schemaName="${schema}">
+            <column name="country" type="VARCHAR(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_iso_code" type="CHAR(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="region" type="VARCHAR(26)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-5">
+        <createTable tableName="flightavailability" schemaName="${schema}">
+            <column name="flight_id" type="CHAR(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="segment_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="flight_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="economy_seats_taken" type="INT"/>
+            <column defaultValueNumeric="0" name="business_seats_taken" type="INT"/>
+            <column defaultValueNumeric="0" name="firstclass_seats_taken" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-6">
+        <createTable tableName="flights" schemaName="${schema}">
+            <column name="flight_id" type="CHAR(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="segment_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="orig_airport" type="CHAR(3)"/>
+            <column name="depart_time" type="time"/>
+            <column name="dest_airport" type="CHAR(3)"/>
+            <column name="arrive_time" type="time"/>
+            <column name="meal" type="CHAR(1)"/>
+            <column name="flying_time" type="FLOAT"/>
+            <column name="miles" type="INT"/>
+            <column name="aircraft" type="VARCHAR(6)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-7">
+        <createTable tableName="flights_history" schemaName="${schema}">
+            <column name="flight_id" type="CHAR(6)"/>
+            <column name="segment_number" type="INT"/>
+            <column name="orig_airport" type="CHAR(3)"/>
+            <column name="depart_time" type="time"/>
+            <column name="dest_airport" type="CHAR(3)"/>
+            <column name="arrive_time" type="time"/>
+            <column name="meal" type="CHAR(1)"/>
+            <column name="flying_time" type="FLOAT"/>
+            <column name="miles" type="INT"/>
+            <column name="aircraft" type="VARCHAR(6)"/>
+            <column name="status" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-8">
+        <createTable tableName="maps" schemaName="${schema}">
+            <column name="map_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="map_name" type="VARCHAR(24)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="region" type="VARCHAR(26)"/>
+            <column name="area" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo_format" type="VARCHAR(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="picture" type="BLOB"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-9">
+        <addPrimaryKey columnNames="airline" constraintName="airlines_pk" tableName="airlines" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-10">
+        <addPrimaryKey columnNames="city_id" constraintName="cities_pk" tableName="cities" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-11">
+        <addPrimaryKey columnNames="country_iso_code" constraintName="countries_pk" tableName="countries" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-12">
+        <addPrimaryKey columnNames="flight_id, segment_number, flight_date" constraintName="flightavail_pk" tableName="flightavailability" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-13">
+        <addPrimaryKey columnNames="flight_id, segment_number" constraintName="flights_pk" tableName="flights" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-14">
+        <addPrimaryKey columnNames="map_id" constraintName="maps_pk" tableName="maps" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-15">
+        <addForeignKeyConstraint baseTableSchemaName="${schema}" referencedTableSchemaName="${schema}" baseColumnNames="country_iso_code" baseTableName="cities" constraintName="countries_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="country_iso_code" referencedTableName="countries"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-16">
+        <addForeignKeyConstraint baseTableSchemaName="${schema}" referencedTableSchemaName="${schema}" baseColumnNames="flight_id, segment_number" baseTableName="flightavailability" constraintName="flights_fk2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="flight_id, segment_number" referencedTableName="flights"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-17">
+        <addUniqueConstraint columnNames="country" constraintName="countries_unq_nm" deferrable="false" disabled="false" initiallyDeferred="false" tableName="countries" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-18">
+        <addUniqueConstraint columnNames="map_id, map_name" constraintName="maps_map_id_map_name_key" deferrable="false" disabled="false" initiallyDeferred="false" tableName="maps" schemaName="${schema}"/>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-19">
+        <createIndex indexName="destindex" tableName="flights" unique="false" schemaName="${schema}">
+            <column name="dest_airport"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="${author}" id="1401235829407-20">
+        <createIndex indexName="origindex" tableName="flights" unique="false" schemaName="${schema}">
+            <column name="orig_airport"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

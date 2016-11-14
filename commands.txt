@@ -1,0 +1,2 @@
+./liquibase update
+./liquibase --changeLogFile=baseline.xml generateChangeLog

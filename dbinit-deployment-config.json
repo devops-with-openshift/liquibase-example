@@ -1,0 +1,139 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "foo",
+        "creationTimestamp": null
+    },
+    "objects": [
+{
+    "kind": "DeploymentConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "dbinit",
+        "creationTimestamp": null,
+        "labels": {
+            "app": "dbinit"
+        },
+        "annotations": {
+            "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+    },
+    "spec": {
+        "strategy": {
+            "type": "Recreate",
+            "recreateParams": {
+                "timeoutSeconds": 600,
+                "pre": {
+                    "failurePolicy": "Ignore",
+                    "execNewPod": {
+                        "command": [
+                            "sh",
+                            "-c",
+                            "cd /deployments \u0026\u0026 ./liquibase --defaultSchemaName=public --url=jdbc:postgresql://${POSTGRESQL_SERVICE_HOST:-127.0.0.1}:5432/test --driver=org.postgresql.Driver update -Dauthor=mike -Dschema=MY_SCHEMA"
+                        ],
+                        "containerName": "dbinit"
+                    }
+                },
+                "post": {
+                    "failurePolicy": "Ignore",
+                    "execNewPod": {
+                        "command": [
+                            "sh",
+                            "-c",
+                            "rm -f /data/baseline.xml \u0026\u0026 cd /deployments \u0026\u0026 ./liquibase --defaultSchemaName=my_schema --changeLogFile=/data/baseline.xml --url=jdbc:postgresql://${POSTGRESQL_SERVICE_HOST:-127.0.0.1}:5432/test --driver=org.postgresql.Driver generateChangeLog"
+                        ],
+                        "containerName": "dbinit",
+                        "volumes": [
+                            "dbinit-data"
+                        ]
+                    }
+                }
+            },
+            "resources": {}
+        },
+        "triggers": [
+            {
+                "type": "ConfigChange"
+            },
+            {
+                "type": "ImageChange",
+                "imageChangeParams": {
+                    "automatic": true,
+                    "containerNames": [
+                        "dbinit"
+                    ],
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "namespace": "postgres",
+                        "name": "db_init:latest"
+                    }
+                }
+            }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+            "app": "dbinit",
+            "deploymentconfig": "dbinit"
+        },
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "dbinit",
+                    "deploymentconfig": "dbinit"
+                },
+                "annotations": {
+                    "openshift.io/container.dbinit.image.entrypoint": "[\"/usr/local/s2i/run\"]",
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                }
+            },
+            "spec": {
+                "volumes": [
+                    {
+                        "name": "dbinit-data",
+                        "persistentVolumeClaim": {
+                            "claimName": "dbinit-data"
+                        }
+                    }
+                ],
+                "containers": [
+                    {
+                        "name": "dbinit",
+                        "image": "${IMAGE_STREAM}",
+                        "ports": [
+                            {
+                                "containerPort": 8778,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "volumeMounts": [
+                            {
+                                "name": "dbinit-data",
+                                "mountPath": "/data"
+                            }
+                        ],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "imagePullPolicy": "Always"
+                    }
+                ],
+                "restartPolicy": "Always",
+                "terminationGracePeriodSeconds": 30,
+                "dnsPolicy": "ClusterFirst",
+                "securityContext": {}
+            }
+        }
+    }
+}
+    ],
+    "parameters": [
+        {
+            "description": "The name for the dbinit IMAGE_STREAM",
+            "name": "IMAGE_STREAM",
+            "required": true
+        }
+    ],
+    "status": {}
+    }

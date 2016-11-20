@@ -56,7 +56,7 @@ oc process -f https://raw.githubusercontent.com/eformat/liquibase-example/master
 oc deploy dbinit --latest
 ````
 
-You should see successfull events for the deployment hooks when the db-init pod starts:
+You should see successful events for the deployment hooks when the db-init pod starts:
 
 ````
 8:26:23 AM	dbinit	Deployment Config	Normal	Started 	Running pre-hook ("sh -c cd /deployments && ./liquibase --defaultSchemaName=public --url=jdbc:postgresql://${POSTGRESQL_SERVICE_HOST:-127.0.0.1}:5432/test --driver=org.postgresql.Driver update -Dauthor=mike -Dschema=MY_SCHEMA") for deployment postgres/dbinit-1

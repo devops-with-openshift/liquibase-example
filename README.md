@@ -52,7 +52,7 @@ pre-hook. We generate an xml representation of the changelog table using the pos
 oc create -f https://raw.githubusercontent.com/eformat/liquibase-example/master/dbinit-data-pvc.yaml
 oc new-app https://github.com/eformat/liquibase-example.git --name=dbinit --strategy=docker
 oc delete dc/dbinit
-oc process -f https://raw.githubusercontent.com/eformat/liquibase-example/master/dbinit-deployment-config.json -v="IMAGE_STREAM=$(oc get is/dbinit | grep -v DOCK| awk '{print $2}')" | oc create -f -
+oc process -f https://raw.githubusercontent.com/eformat/liquibase-example/master/dbinit-deployment-config.json -p "IMAGE_STREAM=$(oc get is/dbinit | grep -v DOCK| awk '{print $2}')" | oc create -f -
 oc rollout latest dc/dbinit
 ````
 
